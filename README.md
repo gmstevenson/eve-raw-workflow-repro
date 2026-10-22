@@ -5,8 +5,9 @@ A minimal eve app that shows a build defect: a `?raw` asset import builds in a t
 ## Versions
 
 - eve 0.82.0 (also seen on 0.79.0)
-- Node.js 24
-- macOS (local `eve build`); the same error on a Vercel build (linux-x64)
+- Local: macOS 27.0 (build 26A428), Apple M5 (arm64), Node.js 24.21.0, npm 11.19.0
+- Vercel: the linux-x64 build image, Node.js 24.x, npm. The same error
+- `eve info`: compile ready, 0 errors, 0 warnings. The failure comes later, when `eve build` bundles the workflow
 
 ## Reproduce
 
