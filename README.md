@@ -44,7 +44,11 @@ npm run build   # succeeds
 
 ## Expected
 
-The build succeeds, and the step reads the file as UTF-8 text. The eve docs (reference/typescript-api, "Asset imports") say: "`?raw` embeds the file as UTF-8 text. … Compilation, local development, and production builds use the same resolution behavior."
+The build succeeds, and the step reads the file as UTF-8 text. The eve docs say so:
+
+- [Asset imports](https://eve.dev/docs/reference/typescript-api#asset-imports): "`?raw` embeds the file as UTF-8 text. … Compilation, local development, and production builds use the same resolution behavior."
+- [Authored module lifecycle](https://eve.dev/docs/reference/typescript-api#authored-module-lifecycle): the compile and runtime contract for authored modules.
+- [Workflows as tools, Rules](https://eve.dev/docs/tools/workflows#rules): workflow and step modules may import the application's own modules.
 
 ## Likely cause
 
