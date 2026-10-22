@@ -1,0 +1,1 @@
+Any text. A ?raw import of this file works in a tool and fails in a workflow step.
