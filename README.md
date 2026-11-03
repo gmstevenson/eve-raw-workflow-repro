@@ -7,7 +7,7 @@ This is the second part of [vercel/eve#5269](https://github.com/vercel/eve/issue
 ## Versions
 
 - eve 1.0.0-rc.2 (also seen on 0.83.2)
-- zod 4.6.7 (only its `README.md` is used, as a file that is in `node_modules`)
+- zod 4.6.7 (the build reads only its `README.md`, a file in `node_modules`)
 - macOS 27.0 (build 26A428), Apple M5 (arm64), Node.js 24.21.0, npm 11.19.0
 - The same error on Vercel, in the linux-x64 build image
 
@@ -58,7 +58,7 @@ npm run build   # succeeds
 git checkout -- agent && rm -f agent/lib/repro-flow.ts.bak && rm -rf pkg
 ```
 
-In a real app, a script does the copy, and every command that bundles or runs the app runs that script first: the build, the dev server and the test runner. The copies are made again from the installed package each time, so they cannot get out of date with the package version.
+In a real app, a script does the copy. Every command that bundles or runs the app runs that script first: the build, the dev server and the test runner. The script copies the files again from the installed package each time, thus the copies cannot get out of date.
 
 The workaround has costs:
 
@@ -82,7 +82,7 @@ A bare package path (`zod/README.md?raw`) is not an alternative. eve does not re
 The build succeeds, and the step reads the file as UTF-8 text, as the tool does. The eve docs say:
 
 - [Asset imports](https://eve.dev/docs/reference/typescript-api#asset-imports): "`?raw` embeds the file as UTF-8 text. … Compilation, local development, and production builds use the same resolution behavior."
-- [Workflows as tools, Rules](https://eve.dev/docs/tools/workflows#rules): workflow and step modules may import the application's own modules.
+- [Workflows as tools, Rules](https://eve.dev/docs/tools/workflows#rules): workflow and step modules can import the application's own modules.
 
 ## Likely cause
 
