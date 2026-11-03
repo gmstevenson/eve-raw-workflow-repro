@@ -9,7 +9,6 @@ This is the second part of [vercel/eve#5269](https://github.com/vercel/eve/issue
 - eve 1.0.0-rc.2 (also seen on 0.83.2)
 - zod 4.6.7 (the build reads only its `README.md`, a file in `node_modules`)
 - macOS 27.0 (build 26A428), Apple M5 (arm64), Node.js 24.21.0, npm 11.19.0
-- The same error on Vercel, in the linux-x64 build image
 
 ## Reproduce
 
