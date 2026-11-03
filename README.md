@@ -83,7 +83,7 @@ The build succeeds, and the step reads the file as UTF-8 text, as the tool does.
 - [Asset imports](https://eve.dev/docs/reference/typescript-api#asset-imports): "`?raw` embeds the file as UTF-8 text. … Compilation, local development, and production builds use the same resolution behavior."
 - [Workflows as tools, Rules](https://eve.dev/docs/tools/workflows#rules): workflow and step modules can import the application's own modules.
 
-## Likely cause
+## Cause
 
 The workflow bundle (`dist/src/internal/workflow-bundle/builder.js`) and the Nitro host bundle (`dist/src/internal/nitro/host/host-plugins.js`) create the asset plugin with `authoredSourceOnly: true`. The tool bundles create it without that option.
 
@@ -93,6 +93,30 @@ In `dist/src/internal/authored-asset-import-plugin.js`, that option makes the pl
 handles = t => e.authoredSourceOnly !== true || isAbsolute(t) && !isNodeModulesPath(t)
 ```
 
-`resolveId` applies `handles` to the importer (`agent/lib/repro-flow.ts`, which passes) and resolves the import to `<app>/node_modules/zod/README.md?raw`. `load` then applies `handles` to that resolved path, which is in `node_modules`, so the plugin returns nothing. The bundler then tries to read `README.md?raw` as a file name, and fails.
+`resolveId` applies `handles` to the importer (`agent/lib/repro-flow.ts`, which passes) and resolves the import to `<app>/node_modules/zod/README.md?raw`. `load` then applies `handles` to that resolved path, which is in `node_modules`, so the plugin returns nothing. The bundler then tries to read `README.md?raw` as a file name, and fails. The file exists. The `?raw` suffix in the name causes the error.
 
-The purpose of the option seems to be to keep the plugin away from code in packages. If so, `load` must apply the test to the importer, as `resolveId` does, not to the asset.
+### Which bundle fails
+
+We set `authoredSourceOnly` to `false` at one call site at a time in `node_modules/eve/dist`, and ran `npm run build`:
+
+| Patch | Build |
+|---|---|
+| None | fails |
+| `nitro/host/host-plugins.js` only | builds |
+| `workflow-bundle/builder.js` only | fails |
+| Both | builds |
+
+Thus the failure is in the Nitro host bundle.
+
+### A change that makes the build pass
+
+Remove the asset-path test from `load` in `authored-asset-import-plugin.js`. `resolveId` keeps its test of the importer:
+
+```diff
+- if(!isPotentialAuthoredAssetImport(e)||!handles(t))return;
++ if(!isPotentialAuthoredAssetImport(e))return;
+```
+
+With only this change, the repro builds on 1.0.0-rc.2. In eve 0.83.2 the line is `if(!isPotentialAuthoredAssetImport(t)||!handles(t))return;`, and the same change makes a larger app build. That app has 15 such imports, and the text is in its built server and workflow functions.
+
+This change is a test, not the fix we propose. Without the test in `load`, the plugin also loads a `?raw` id that the code of a package imports. If the purpose of `authoredSourceOnly` is to keep the plugin away from code in packages, the fix must test the importer, not the asset. For example, `resolveId` records the ids that it resolves for an authored importer, and `load` accepts only those ids.
