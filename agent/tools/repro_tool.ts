@@ -1,6 +1,6 @@
 // Starts the workflow, so the workflow bundler builds repro-flow.ts.
 import { defineTool } from "eve/tools";
-import { start } from "workflow/api";
+import { start } from "eve/workflow/api";
 import { z } from "zod";
 import { reproFlow } from "../lib/repro-flow.ts";
 

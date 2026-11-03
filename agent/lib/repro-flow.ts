@@ -1,5 +1,5 @@
-// The defect: the same ?raw import in a module that a workflow step reaches fails `eve build`.
-import text from "../../prompts/any.txt?raw";
+// The defect: a ?raw import of a file inside node_modules, in a module that a workflow step reaches, fails `eve build`.
+import text from "../../node_modules/zod/README.md?raw";
 
 async function size(): Promise<number> {
   "use step";
