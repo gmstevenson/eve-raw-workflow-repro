@@ -120,3 +120,7 @@ Remove the asset-path test from `load` in `authored-asset-import-plugin.js`. `re
 With only this change, the repro builds on 1.0.0-rc.2. In eve 0.83.2 the line is `if(!isPotentialAuthoredAssetImport(t)||!handles(t))return;`, and the same change makes a larger app build. That app has 15 such imports, and the text is in its built server and workflow functions.
 
 This change is a test, not the fix we propose. Without the test in `load`, the plugin also loads a `?raw` id that the code of a package imports. If the purpose of `authoredSourceOnly` is to keep the plugin away from code in packages, the fix must test the importer, not the asset. For example, `resolveId` records the ids that it resolves for an authored importer, and `load` accepts only those ids.
+
+## Other reproductions
+
+- [`budget-prompt-respond/`](budget-prompt-respond): `respond()` to a budget prompt that a workflow's subagent raised sometimes never returns (eve 1.0.0). It has its own `package.json`: run it from that folder.

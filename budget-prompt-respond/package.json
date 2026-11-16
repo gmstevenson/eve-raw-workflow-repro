@@ -1,0 +1,17 @@
+{
+  "name": "eve-budget-prompt-repro",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "eval": "eve eval --repeat 16",
+    "eval:serial": "eve eval --repeat 16 --max-concurrency 1"
+  },
+  "dependencies": {
+    "eve": "1.0.0",
+    "just-bash": "^3.6.0",
+    "zod": "^4.6.7"
+  }
+}
